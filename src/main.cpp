@@ -81,7 +81,6 @@ struct Suggest {
     } else {
       cout << "Adding the new entry" << endl;
       insert(key, weight);
-      //ds.mostrar();
       int position = ds.posicion(key);
       st.insert(position, weight);
     }
@@ -98,7 +97,9 @@ int main(int argc, char const *argv[]) {
     string filename(argv[1]);
     sug.build(filename);
     cout << "DS builded using " <<  filename << " file." << endl;
-    //print(sug);
+#ifdef ACMTUYO
+    print(sug);
+#endif   
   } else {
     cout << "Data structure empty, not using a dataset." << endl;
   }
@@ -117,21 +118,10 @@ int main(int argc, char const *argv[]) {
       cout << endl;
     } else {//add or update
       sug.add(keyword, value);
+#ifdef ACMTUYO
+    print(sug);
+#endif   
     }
   }
-  /*Suggest sug;
-  sug.build("generatedDataSet.txt");
-  cout << "DS builded" << endl;
-  string prefix;
-  int k;
-  while (cin >> prefix >> k) {
-    auto indexes = sug.query(prefix, k);
-    for (int index: indexes) {
-      phrase res = sug.get(index);
-      cout << res.str << ' ' << res.weight << ' ';
-    }
-    cout << endl;
-  }
-  cout << "ALL OK" << endl;*/
   return 0;
 }
