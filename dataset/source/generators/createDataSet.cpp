@@ -35,7 +35,8 @@ vector<string> tokenize(string &ss) {
   }
   return answer;
 }
-int main() {
+int main(int argc, char const *argv[]) {
+  srand(time(NULL));
   string line;
   set<string> myset;
   while (getline(cin, line)) {
@@ -44,8 +45,18 @@ int main() {
       myset.insert(token);
     }
   }
-  for (string keyword: myset) {
-    cout << keyword << ' ' << rand()%sz(myset)+1 << endl;
+  
+  vector<string> res(myset.begin(), myset.end());
+  random_shuffle(res.begin(), res.end());
+  int datasetsize = sz(res);
+  if (argc > 1) {
+    datasetsize = atoi(argv[1]);
+  } else {
+    cerr << "You forgot to pass the size of the dataset to generate." << endl;
+    return 0;
+  }
+  forn (i, datasetsize) {
+    cout << res[i] << ' ' << rand()%sz(res)+1 << endl;
   }
   return 0;
 }

@@ -351,8 +351,9 @@ int main(int argc, char const *argv[]) {
     if (type == 'Q') {//query
       auto indexes = sug.query(keyword, value);
       for (int index: indexes) {
-        phrase res = sug.get(index);
-        cout << index << ":" << res.str << '(' << res.weight << ") ";
+        //phrase res = sug.get(index);
+        //cout << index << ":" << res.str << '(' << res.weight << ") ";
+        cout << index << ' ';
       }
       cout << endl;
     } else {//add or update
