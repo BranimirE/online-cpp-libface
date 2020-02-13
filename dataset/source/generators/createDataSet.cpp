@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]) {
   random_shuffle(res.begin(), res.end());
   int datasetsize = sz(res);
   if (argc > 1) {
-    datasetsize = atoi(argv[1]);
+    datasetsize = min(datasetsize, atoi(argv[1]));
   } else {
     cerr << "You forgot to pass the size of the dataset to generate." << endl;
     return 0;
