@@ -1,8 +1,12 @@
 #include "trie.hpp"
 #include "treap.hpp"
 #include <bits/stdc++.h>
+#include <chrono>
 
 using namespace std;
+using milli_s = std::chrono::milliseconds;
+using micro_s = std::chrono::microseconds;
+using nano_s = std::chrono::nanoseconds;
 
 #ifdef ACMTUYO
 struct RTC{~RTC(){cerr << "Time: " << clock() * 1.0 / CLOCKS_PER_SEC <<" seconds\n";}} runtimecount;
@@ -85,30 +89,55 @@ struct Suggest {
       st.insert(position, weight);
     }
   }
+
+  int size() {
+    return st.size();
+  }
 };
 
 void print(Suggest &sug) {
   sug.ds.mostrar();
 }
 
+void menu() {
+   string out = "Queries format:\n"
+     "Q PREFIX K\n"
+     "Example:\n"
+     "Q HELL 5\n\n"
+     "Add format:\n"
+     "A STRING VALUE\n"
+     "Example:\n"
+     "A HELL 1232\n\n"
+     "Update format:\n"
+     "U STRING VALUE\n"
+     "Example:\n"
+     "U HELL 8765\n\n";
+   cout << out << endl;
+
+}
+
 int main(int argc, char const *argv[]) {
   Suggest sug;
   if (argc > 1) {
+    
+    auto t1 = std::chrono::steady_clock::now();
     string filename(argv[1]);
     sug.build(filename);
-    cout << "DS builded using " <<  filename << " file." << endl;
-#ifdef ACMTUYO
-    print(sug);
-#endif   
+    auto t2 = std::chrono::steady_clock::now();
+    cout << "Data Structure builded using " <<  filename << " file." << endl;
+    cout << sug.size() << " strings builded in " << std::chrono::duration_cast<milli_s>( t2 - t1 ).count() << " milliseconds.\n" << endl;
   } else {
     cout << "Data structure empty, not using a dataset." << endl;
   }
+  menu();
   string command;
   while (cin >> command) {
     char type = toupper(command[0]);
     string keyword;
     int value;
     cin >> keyword >> value;
+
+    auto t1 = std::chrono::steady_clock::now();
     if (type == 'Q') {//query
       auto indexes = sug.query(keyword, value);
       for (int index: indexes) {
@@ -118,10 +147,13 @@ int main(int argc, char const *argv[]) {
       cout << endl;
     } else {//add or update
       sug.add(keyword, value);
-#ifdef ACMTUYO
-    print(sug);
-#endif   
+      sug.query(keyword, 1);
     }
+    auto t2 = std::chrono::steady_clock::now();
+    cout << "Operation finished in " << std::chrono::duration_cast<milli_s>( t2 - t1 ).count() << " milliseconds = "
+    << std::chrono::duration_cast<micro_s>( t2 - t1 ).count() << " microseconds = "
+    << std::chrono::duration_cast<nano_s>( t2 - t1 ).count() << " nanoseconds. \n" << endl;
+
   }
   return 0;
 }
